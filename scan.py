@@ -200,7 +200,7 @@ with open(input_file, "r") as in_file:
         # J.) RDNS Names
         ip_address = output[domain]["ipv4_addresses"][0].split("#")[0]
         try:
-            ret = subprocess.check_output(['dig', '-x', '142.250.191.174'], timeout=2, universal_newlines=True)
+            ret = subprocess.check_output(['dig', '-x', ip_address], timeout=2, universal_newlines=True)
             rdns_names = [line.split()[-1][:-1] for line in ret.splitlines() if 'PTR' in line and ';' not in line]
             print(f"Found RDNS names:", rdns_names)
         except (socket.herror, socket.gaierror) as e:
