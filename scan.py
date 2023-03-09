@@ -63,6 +63,10 @@ with open(input_file, "r") as in_file:
         ip_scan('A')
         print("\nPart B (ipv4_addresses) successful.\nStarting part C (ipv6_addresses)...\n")
 
+        # C.) IPv6 Addresses
+        ip_scan('AAAA')
+        print("\nPart C (ipv6_addresses) successful.\nStarting part D (http_server)...\n")
+
 # Output to JSON
 with open(output_file, "w") as out_file:
     json.dump(output, out_file, sort_keys=True, indent=4)
