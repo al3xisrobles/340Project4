@@ -6,6 +6,8 @@ import requests
 import socket
 import urllib.parse
 import maxminddb
+import ssl
+import certifi
 
 # Parse arguments
 args = sys.argv[1:]
@@ -193,20 +195,10 @@ with open(input_file, "r") as in_file:
             # Root CA might be null
             if root_ca:
                 output[domain]["root_ca"] = root_ca
+                print("Found root CA:", root_ca)
         except Exception as e:
+            output[domain]["root_ca"] = None
             print(f"Error while trying to fetch root CA for {domain}: {e}")
-        print("\nPart I (root_ca) successful.\nStarting part J (rdns_names)...\n")
-
-        # J.) RDNS Names
-        ip_address = output[domain]["ipv4_addresses"][0].split("#")[0]
-        try:
-            ret = subprocess.check_output(['dig', '-x', ip_address], timeout=2, universal_newlines=True)
-            rdns_names = [line.split()[-1][:-1] for line in ret.splitlines() if 'PTR' in line and ';' not in line]
-            print(f"Found RDNS names:", rdns_names)
-        except (socket.herror, socket.gaierror) as e:
-            print(f"Error while trying to fetch reverse DNS names for {domain}: {e}")
-            rdns_names = []
-        output[domain]["rdns_names"] = rdns_names
         print("\nPart J (rdns_names) successful.\nStarting part K (rtt_range)...\n")
 
         # K.) RTT Range
